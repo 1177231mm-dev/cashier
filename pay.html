@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お支払い - スマホ側</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center p-6 h-screen">
+
+    <h1 class="mt-10 text-gray-500 font-bold">お支払い合計</h1>
+    <div id="total" class="text-6xl font-black text-red-600 my-6">¥0</div>
+
+    <div class="w-full max-w-sm bg-white rounded-2xl p-6 shadow-md mb-10">
+        <p class="font-bold mb-4">支払い方法</p>
+        <div class="space-y-2">
+            <label class="block border p-4 rounded-xl"><input type="radio" name="p" value="現金" checked> 💰 現金</label>
+            <label class="block border p-4 rounded-xl"><input type="radio" name="p" value="どんぐり"> 🌰 どんぐり</label>
+            <label class="block border p-4 rounded-xl"><input type="radio" name="p" value="肩たたき"> 💆 肩たたき</label>
+        </div>
+    </div>
+
+    <button onclick="pay()" class="w-full max-w-sm bg-red-600 text-white py-6 rounded-2xl text-2xl font-bold">支払う</button>
+
+    <script>
+        const firebaseConfig = { /* iPad側と同じものを貼る */ };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // 金額をリアルタイム取得
+        database.ref('current_pay').on('value', (snap) => {
+            const data = snap.val();
+            if (data) {
+                document.getElementById('total').innerText = "¥" + data.amount.toLocaleString();
+            } else {
+                document.getElementById('total').innerText = "お会計待ち...";
+            }
+        });
+
+        function pay() {
+            database.ref('current_pay').update({ status: 'paid' });
+            alert("お支払いが完了しました！iPadを見てね。");
+        }
+    </script>
+</body>
+</html>

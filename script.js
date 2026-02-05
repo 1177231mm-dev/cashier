@@ -1,0 +1,83 @@
+// --- Firebase初期設定 ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDbzGn5MyHg9iwx6wDpWrOV7OWJp5AOjhk",
+  authDomain: "cashier-8da8d.firebaseapp.com",
+  databaseURL: "https://cashier-8da8d-default-rtdb.firebaseio.com",
+  projectId: "cashier-8da8d",
+  storageBucket: "cashier-8da8d.firebasestorage.app",
+  messagingSenderId: "283561686418",
+  appId: "1:283561686418:web:c09c160738bb5e40d47d4b",
+  measurementId: "G-KW17V9VZ3X"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// --- メニューデータ ---
+const menuData = {
+    drink: [{ name: '生ビール', price: 500, icon: '🍺' }, { name: 'ハイボール', price: 480, icon: '🥃' }, { name: 'レモンサワー', price: 400, icon: '🍋' }],
+    food: [{ name: '枝豆', price: 300, icon: '🌱' }, { name: '唐揚げ', price: 600, icon: '🍗' }, { name: '焼き鳥', price: 450, icon: '🍢' }],
+    main: [{ name: 'おにぎり', price: 200, icon: '🍙' }, { name: '焼きそば', price: 700, icon: '🥢' }]
+};
+
+let currentOrder = [];
+let discount = 0;
+
+// カテゴリ切り替え
+function switchCategory(cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + cat).classList.add('active');
+    const container = document.getElementById('menu-container');
+    container.innerHTML = '';
+    menuData[cat].forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-item-btn';
+        btn.innerHTML = `${item.icon} ${item.name}<br>¥${item.price}`;
+        btn.onclick = () => { currentOrder.push(item); updateDisplay(); };
+        container.appendChild(btn);
+    });
+}
+
+function updateDisplay() {
+    const list = document.getElementById('order-list');
+    list.innerHTML = '';
+    let subtotal = currentOrder.reduce((s, i) => s + i.price, 0);
+    currentOrder.forEach(item => {
+        list.innerHTML += `<div class="order-item"><span>${item.name}</span><span>¥${item.price}</span></div>`;
+    });
+    const total = Math.max(0, subtotal - discount);
+    document.getElementById('total-amount').innerText = `¥${total.toLocaleString()}`;
+}
+
+// 会計開始（Firebaseへ書き込み）
+function startCheckout() {
+    const total = parseInt(document.getElementById('total-amount').innerText.replace(/[¥,]/g, ''));
+    if (total <= 0) return;
+
+    // Firebaseへ送信
+    database.ref('current_pay').set({
+        amount: total,
+        status: 'waiting'
+    });
+
+    // QRコード生成 (このHTMLファイルのURLをQRにする。実際はデプロイ後のURLに変更が必要)
+    const currentUrl = window.location.href.replace('index.html', 'pay.html');
+    document.getElementById('qr-area').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${currentUrl}">`;
+    document.getElementById('modal-total').innerText = `¥${total.toLocaleString()}`;
+    document.getElementById('checkout-modal').classList.remove('hidden');
+
+    // 支払い監視
+    database.ref('current_pay/status').on('value', (snap) => {
+        if (snap.val() === 'paid') {
+            alert("チャリーン！お支払いありがとうございました！");
+            database.ref('current_pay').set(null); // クリア
+            location.reload(); // 画面リセット
+        }
+    });
+}
+
+function applyDiscount(amt) { discount += amt; updateDisplay(); }
+function applyHalfPrice() { let s = currentOrder.reduce((s, i) => s + i.price, 0); discount = Math.floor(s / 2); updateDisplay(); }
+function clearOrder() { currentOrder = []; discount = 0; updateDisplay(); }
+function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); database.ref('current_pay').set(null); }
+
+switchCategory('drink');

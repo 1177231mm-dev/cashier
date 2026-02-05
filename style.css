@@ -1,0 +1,154 @@
+/* 全体の設定 */
+body {
+    margin: 0;
+    background-color: #f4f1ea;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+header {
+    background-color: #991b1b;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* タブボタン */
+.tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid #ddd;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #fff;
+    color: #991b1b;
+    border-bottom: 4px solid #991b1b;
+}
+
+/* メインレイアウト */
+main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.menu-grid {
+    flex: 2;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    overflow-y: auto;
+    align-content: start;
+}
+
+/* メニューボタン */
+.menu-item-btn {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: none;
+    border-bottom: 5px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.menu-item-btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+/* 右側の伝票エリア */
+.cart-area {
+    flex: 1;
+    background: white;
+    border-left: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-title {
+    padding: 15px;
+    background: #f8f8f8;
+    text-align: center;
+    font-weight: bold;
+}
+
+.order-list {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+/* 会計エリア */
+.checkout-area {
+    padding: 20px;
+    background: #eee;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+}
+
+#total-amount { color: #d32f2f; }
+
+.pay-btn {
+    width: 100%;
+    background: #eab308;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* モーダル */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal.hidden { display: none; }
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.qr-placeholder img { width: 200px; height: 200px; margin: 20px 0; }

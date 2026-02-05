@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>居酒屋レジ - iPad側</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>🏮 居酒屋レジ</h1>
+        <div class="daily-sales-box">売上合計: <span id="daily-sales">¥0</span></div>
+    </header>
+
+    <div class="tabs">
+        <button onclick="switchCategory('drink')" id="tab-drink" class="tab-btn active">🍺 飲み物</button>
+        <button onclick="switchCategory('food')" id="tab-food" class="tab-btn">🥗 つまみ</button>
+        <button onclick="switchCategory('main')" id="tab-main" class="tab-btn">🍚 お食事</button>
+    </div>
+
+    <main>
+        <div id="menu-container" class="menu-grid"></div>
+
+        <aside class="cart-area">
+            <div class="cart-title">現在の伝票</div>
+            <div id="order-list" class="order-list"></div>
+            
+            <div class="discount-area">
+                <button onclick="applyDiscount(100)" class="disc-btn">常連割-100</button>
+                <button onclick="applyHalfPrice()" class="disc-btn red">半額</button>
+            </div>
+
+            <div class="checkout-area">
+                <div class="total-row"><span>合計</span><span id="total-amount">¥0</span></div>
+                <button onclick="startCheckout()" class="pay-btn">💳 会計する</button>
+                <button onclick="clearOrder()" class="clear-btn">クリア</button>
+            </div>
+        </aside>
+    </main>
+
+    <div id="checkout-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>お支払い待ち</h2>
+            <div id="qr-area" class="qr-placeholder"></div>
+            <p id="modal-total" style="font-size: 2rem; color: red; font-weight: bold;">¥0</p>
+            <button onclick="closeCheckout()" class="cancel-btn">キャンセル</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
