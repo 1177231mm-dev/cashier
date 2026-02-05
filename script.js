@@ -12,6 +12,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+const pipSound = new Audio('pip.mp3'); // ボタンの音
+const cashSound = new Audio('cash.mp3'); // レジが開く音
+
 // --- メニューデータ ---
 const menuData = {
     drink: [{ name: '生ビール', price: 500, icon: '🍺' }, { name: 'ハイボール', price: 480, icon: '🥃' }, { name: 'レモンサワー', price: 400, icon: '🍋' }],
@@ -32,9 +35,21 @@ function switchCategory(cat) {
         const btn = document.createElement('button');
         btn.className = 'menu-item-btn';
         btn.innerHTML = `${item.icon} ${item.name}<br>¥${item.price}`;
-        btn.onclick = () => { currentOrder.push(item); updateDisplay(); };
+        btn.onclick = () => addItem(item.name, item.price);
         container.appendChild(btn);
     });
+}
+
+function addItem(name, price) {
+    // 音を鳴らす（再生位置を先頭に戻してから再生）
+    pipSound.currentTime = 0;
+    pipSound.play();
+
+    // 注文リストに追加
+    currentOrder.push({ name, price });
+    
+    // 画面表示を更新
+    updateDisplay();
 }
 
 function updateDisplay() {
@@ -68,7 +83,7 @@ function startCheckout() {
     // 支払い監視
     database.ref('current_pay/status').on('value', (snap) => {
         if (snap.val() === 'paid') {
-            new Audio('cash.mp3').play();
+            cashSound.play();
             alert("お支払いありがとうございました！");
             database.ref('current_pay').set(null); // クリア
             location.reload(); // 画面リセット
@@ -83,4 +98,5 @@ function closeCheckout() { document.getElementById('checkout-modal').classList.a
 
 
 switchCategory('drink');
+
 
