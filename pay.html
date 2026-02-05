@@ -25,7 +25,15 @@
     <button onclick="pay()" class="w-full max-w-sm bg-red-600 text-white py-6 rounded-2xl text-2xl font-bold">支払う</button>
 
     <script>
-        const firebaseConfig = { https://cashier-8da8d-default-rtdb.firebaseio.com };
+        const firebaseConfig = {
+  apiKey: "AIzaSyDbzGn5MyHg9iwx6wDpWrOV7OWJp5AOjhk",
+  authDomain: "cashier-8da8d.firebaseapp.com",
+  databaseURL: "https://cashier-8da8d-default-rtdb.firebaseio.com",
+  projectId: "cashier-8da8d",
+  storageBucket: "cashier-8da8d.firebasestorage.app",
+  messagingSenderId: "283561686418",
+  appId: "1:283561686418:web:c09c160738bb5e40d47d4b",
+  measurementId: "G-KW17V9VZ3X" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -47,3 +55,4 @@
 </body>
 
 </html>
+
