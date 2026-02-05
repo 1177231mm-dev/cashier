@@ -13,8 +13,16 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // script.js の冒頭をこれに書き換えてテスト
-const pipSound = new Audio('https://view.fuji-climb.com/wp-content/uploads/2021/03/click.mp3'); 
-const cashSound = new Audio('https://view.fuji-climb.com/wp-content/uploads/2021/03/cash-register.mp3');
+const pipSound = new Audio('https://otologic.jp/free/se/bin/button-pressed02.mp3');
+const cashSound = new Audio('https://otologic.jp/free/se/bin/cash-register1.mp3');
+
+function unlockAudio() {
+    pipSound.play().then(() => {
+        pipSound.pause();
+        pipSound.currentTime = 0;
+        console.log("Audio Unlocked!");
+    }).catch(e => console.log("Unlock Failed:", e));
+}
 
 // --- メニューデータ ---
 const menuData = {
@@ -42,16 +50,20 @@ function switchCategory(cat) {
 }
 
 function addItem(name, price) {
-    // 音を鳴らす（再生位置を先頭に戻してから再生）
-    pipSound.currentTime = 0;
-    pipSound.play();
-
-    // 注文リストに追加
-    currentOrder.push({ name, price });
+    console.log("Adding item:", name); // PCのコンソールで確認用
     
-    // 画面表示を更新
+    // ロック解除を兼ねて再生
+    pipSound.currentTime = 0;
+    pipSound.play().catch(e => {
+        console.log("再生に失敗しました。画面を一度クリックしてください。", e);
+    });
+
+    currentOrder.push({ name, price });
     updateDisplay();
 }
+
+// ページが読み込まれたら、どこでもいいからクリックした時にロック解除するようにする
+document.addEventListener('click', unlockAudio, { once: true });
 
 function updateDisplay() {
     const list = document.getElementById('order-list');
@@ -99,6 +111,7 @@ function closeCheckout() { document.getElementById('checkout-modal').classList.a
 
 
 switchCategory('drink');
+
 
 
 
