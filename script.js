@@ -60,7 +60,7 @@ function startCheckout() {
     });
 
     // QRコード生成 (このHTMLファイルのURLをQRにする。実際はデプロイ後のURLに変更が必要)
-    const currentUrl = window.location.href.replace('index.html', 'pay.html');
+    const currentUrl = "https://1177231mm-dev.github.io/cashier/pay.html";
     document.getElementById('qr-area').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${currentUrl}">`;
     document.getElementById('modal-total').innerText = `¥${total.toLocaleString()}`;
     document.getElementById('checkout-modal').classList.remove('hidden');
@@ -79,5 +79,6 @@ function applyDiscount(amt) { discount += amt; updateDisplay(); }
 function applyHalfPrice() { let s = currentOrder.reduce((s, i) => s + i.price, 0); discount = Math.floor(s / 2); updateDisplay(); }
 function clearOrder() { currentOrder = []; discount = 0; updateDisplay(); }
 function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); database.ref('current_pay').set(null); }
+
 
 switchCategory('drink');
