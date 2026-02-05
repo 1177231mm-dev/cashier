@@ -12,8 +12,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-const pipSound = new Audio('pip.mp3'); // ボタンの音
-const cashSound = new Audio('cash.mp3'); // レジが開く音
+// script.js の冒頭をこれに書き換えてテスト
+const pipSound = new Audio('https://view.fuji-climb.com/wp-content/uploads/2021/03/click.mp3'); 
+const cashSound = new Audio('https://view.fuji-climb.com/wp-content/uploads/2021/03/cash-register.mp3');
 
 // --- メニューデータ ---
 const menuData = {
@@ -98,5 +99,6 @@ function closeCheckout() { document.getElementById('checkout-modal').classList.a
 
 
 switchCategory('drink');
+
 
 
