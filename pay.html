@@ -47,12 +47,19 @@
             }
         });
 
-        function pay() {
-            database.ref('current_pay').update({ status: 'paid' });
-            alert("お支払いが完了しました！iPadを見てね。");
-        }
+function pay() {
+    // ステータスを更新
+    database.ref('current_pay').update({ 
+        status: 'paid' 
+    }).then(() => {
+        alert("お支払いが完了しました！");
+    }).catch((error) => {
+        alert("エラーが発生しました: " + error.message);
+    });
+}
     </script>
 </body>
 
 </html>
+
 
