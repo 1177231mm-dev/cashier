@@ -25,7 +25,7 @@
     <button onclick="pay()" class="w-full max-w-sm bg-red-600 text-white py-6 rounded-2xl text-2xl font-bold">支払う</button>
 
     <script>
-        const firebaseConfig = { /* iPad側と同じものを貼る */ };
+        const firebaseConfig = { https://cashier-8da8d-default-rtdb.firebaseio.com };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -45,4 +45,5 @@
         }
     </script>
 </body>
+
 </html>
