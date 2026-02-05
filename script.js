@@ -68,7 +68,8 @@ function startCheckout() {
     // 支払い監視
     database.ref('current_pay/status').on('value', (snap) => {
         if (snap.val() === 'paid') {
-            alert("チャリーン！お支払いありがとうございました！");
+            new Audio('cash.mp3').play();
+            alert("お支払いありがとうございました！");
             database.ref('current_pay').set(null); // クリア
             location.reload(); // 画面リセット
         }
@@ -82,3 +83,4 @@ function closeCheckout() { document.getElementById('checkout-modal').classList.a
 
 
 switchCategory('drink');
+
